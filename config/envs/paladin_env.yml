@@ -1,0 +1,10 @@
+name: paladin_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - paladin
+  - diamond  # PALADIN is built on DIAMOND
+  - samtools  # Optional: If you need to process BAM/SAM files later
+  - mamba  # Faster package management

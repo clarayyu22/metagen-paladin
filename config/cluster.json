@@ -1,0 +1,28 @@
+{
+    "__default__": {
+     "jobname": "{rule}.{wildcards}",
+     "queue": "expansion",
+     "project": "clarayu",
+     "time": "36:00:00",
+     "outfile": "{wildcards.output}/{wildcards.study}/{wildcards.sample}/logs/{rule}.log"
+    },
+    "ena_download": {
+     "cores": 2,
+     "mem": 50000
+    },
+    "metagen_qc": {
+     "cores": 4,
+     "mem": 100000
+    },
+    "paladin_prepare": {
+     "cores": 8,
+     "mem": 32000,
+     "time": "4:00:00"
+    },
+    "paladin_align": {
+     "cores": 6,
+     "mem": 100000,
+     "time": "12:00:00"
+    }
+   }
+   
