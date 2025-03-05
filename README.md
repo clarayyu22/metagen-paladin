@@ -4,7 +4,7 @@
 ----
 Credits: alexmsalmeida (metagen-fetch), ToniWestbrook (paladin)
 
-This is a Snakemake workflow for downloading, quality-controlling metagenomic read files (FASTQ) from ENA, and using PALADIN to align them to FASTA files. It uses [fastq-dl](https://github.com/rpetit3/fastq-dl) to first download a set of paired-end reads from ENA, and subsequently QCs the data using the [metagen-fastqc](https://github.com/alexmsalmeida/Metagen-FastQC) script. It then uses [paladin] (https://github.com/ToniWestbrook/paladin) to align the cleaned metagenomic files to prepared biological sequences. 
+This is a Snakemake workflow for downloading, quality-controlling metagenomic read files (FASTQ) from ENA, and using PALADIN to align them to FASTA files. It uses [fastq-dl](https://github.com/rpetit3/fastq-dl) to first download a set of paired-end reads from ENA, and subsequently QCs the data using the [metagen-fastqc](https://github.com/alexmsalmeida/Metagen-FastQC) script. It then uses [paladin](https://github.com/ToniWestbrook/paladin) to align the cleaned metagenomic files to prepared biological sequences. 
 
 ## Installation
 
@@ -17,7 +17,7 @@ This is a Snakemake workflow for downloading, quality-controlling metagenomic re
 git clone https://github.com/clarayyu22/metagen-paladin.git
 ```
 
-4. Install PALADIN inside the metagen-paladin directory. Follow the instructions prvoided [here] (https://github.com/ToniWestbrook/paladin). 
+4. Install PALADIN inside the metagen-paladin directory. Follow the instructions provided [here](https://github.com/ToniWestbrook/paladin). 
 
 ## How to run
 
