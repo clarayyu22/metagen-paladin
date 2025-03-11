@@ -7,7 +7,7 @@
      "outfile": "{wildcards.output}/{wildcards.study}/{wildcards.sample}/logs/{rule}.log"
     },
     "ena_download": {
-     "cores": 2,
+     "cores": 4,
      "mem": 50000
     },
     "metagen_qc": {
@@ -20,8 +20,8 @@
      "time": "4:00:00"
     },
     "paladin_align": {
-     "cores": 6,
-     "mem": 100000,
+     "cores": 8,
+     "mem": 400000,
      "time": "12:00:00"
     }
    }

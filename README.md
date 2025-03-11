@@ -22,7 +22,7 @@ git clone https://github.com/clarayyu22/metagen-paladin.git
 ## How to run
 
 1. Edit the configuration file [`config_template/config.yml`](config_template/config.yml).
-    - Rename `config_template/config.yml` to `config/config.yml`
+    - Rename `config/config_template.yml` to `config/config.yml`
     - `input_file`: TSV file (no header) with run accessions listed as the first column and corresponding study accessions as the second column.
     - `output_fastq_dir`: Output directory to store cleaned files.
     - `host_ref`: Location of the indexed FASTA file for host decontamination.
@@ -36,7 +36,7 @@ git clone https://github.com/clarayyu22/metagen-paladin.git
         - Path format: `fasta_dir` `fasta`/`fasta`.fasta.txt
     - Run the following command: 
         ```
-        ./paladin/paladin prepare -r1 -f [FASTA file path]`
+        ./paladin/paladin prepare -r1 -f [FASTA file path]
         ```
 
 3. Run the pipeline on a cluster (e.g., SLURM)

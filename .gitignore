@@ -3,3 +3,4 @@ chm13v2.0.fa
 config/config.yml
 paladin/
 scripts/prepare.sh
+slurm-*.out

@@ -1,33 +1,30 @@
 #!/bin/bash
-# script to run Paladin alignment
 set -e
 
-if [ "$#" -ne 6 ]; then
-    echo "Usage: $0 <fasta_name> <fastq_path>"
+# Check if we have the correct number of arguments
+if [ "$#" -ne 4 ]; then
+    echo "Usage: $0 <fasta_name> <fastq_path> <output_prefix> <threads>"
     exit 1
 fi
 
-FASTA_DIR=$1
-FASTA_NAME=$2
-FASTQ_PATH=$3
+FASTA_REF_DIR=$1
+FASTQ_PATH=$2
+OUT_FILE=$3
 THREADS=$4
-OUTPUT_ALIGN_DIR=$5
-DONE=$6
-
-FASTA_PATH="${FASTA_DIR}${FASTA_NAME}/${FASTA_NAME}.fasta.txt"
-SEQUENCE_ID=$(basename "$FASTQ_PATH" | sed 's/\..*$//')
-OUT_FILE="${OUTPUT_ALIGN_DIR}${FASTA_NAME}_${SEQUENCE_ID}_out"
 
 echo "starting alignment..."
-./paladin/paladin align "$FASTA_PATH" "$FASTQ_PATH" -t "$THREADS" -o "$OUT_FILE"
 
-if [ $? -eq 0 ]; then
-    touch "$DONE"
-    echo "Alignment completed: $OUT_FILE"
+# Check if the output file already exists
+if [ ! -f "${OUT_FILE}.sam" ]; then
+    paladin align -a -t "$THREADS" "$FASTA_REF_DIR" "$FASTQ_PATH" > "${OUT_FILE}.sam"
+    # paladin align -a -t "$THREADS" -o "$OUT_FILE" "$FASTA_REF_DIR" "$FASTQ_PATH"
+    
+    if [ $? -eq 0 ]; then
+        echo "PALADIN alignment completed successfully"
+    else
+        echo "Alignment failed, output file not created!" >&2
+        exit 1
+    fi
 else
-    echo "Alignment failed, output file not created!" >&2
-    exit 1
+    echo "Output file ${OUT_FILE}.sam already exists, skipping alignment"
 fi
-
-
-
