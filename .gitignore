@@ -4,3 +4,4 @@ config/config.yml
 paladin/
 scripts/prepare.sh
 slurm-*.out
+paladin_prepare_done.txt
