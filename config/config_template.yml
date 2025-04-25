@@ -1,16 +1,22 @@
-# Parameters for snakemake run
+#Parameters for Snakemake run
 
-input_file: #Path to input TSV file with list of run accessions in first column and study accessions in 2nd column
+#Path to input TSV file with list of run accessions in first column and study accessions in 2nd column
+input_file: 
 
-output_fastq_dir: #Output directory to store cleaned FASTQs
+#Output directory to store cleaned FASTQs, should end with a /
+output_fastq_dir: 
 
-host_ref: #Path to FASTA file of host genome for decontamination
+#Path to FASTA file of host genome for decontamination
+host_ref: 
 
-fasta_dir: #Home directory of the folder with the fasta file of interest
+#Path to fasta file to use for alignment
+fasta_path: 
 
-output_align_dir: #Output directory to store alignment files
+#Path to where paladin reference fasta file will be stored, should end with a /
+paladin_ref_dir: 
 
-fasta: #Fasta file name
+#Arbitrary name of log file for the run
+logfile_name:
 
 paladin:
-  cores: 6
+  cores: 8

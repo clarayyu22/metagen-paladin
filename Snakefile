@@ -28,21 +28,28 @@ with open(INPUT_FILE) as f:
         SAMPLES.append(cols[0])
         STUDIES.append(cols[1])
 
-for sample in samp2study:
-    dirname = OUTPUT_FASTQ_DIR+samp2study[sample]+"/"+sample+"/logs"
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)    
+#for sample in samp2study:
+#    dirname = OUTPUT_FASTQ_DIR+samp2study[sample]+"/"+sample+"/logs"
+#    if not os.path.exists(dirname):
+#        os.makedirs(dirname)
+
+logs_dirname = "logs/" + config['logfile_name']
+if not os.path.exists(logs_dirname):
+    os.makedirs(logs_dirname) 
 
 rule targets:
     input:
         expand([OUTPUT_FASTQ_DIR+"{study}/{sample}/paladin_done.txt"], zip, study=STUDIES, sample=SAMPLES)
-   
+
 rule ena_download:
     output:
-        fwd = "{output}/{study}/{sample}/{sample}_1.fastq.gz"
+        fwd = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1.fastq.gz")
+        #fwd = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1.fastq.gz"
     params:
-        outdir = "{output}/{study}/{sample}",
-        sample = "{sample}"
+        outdir = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}"),
+        #outdir = OUTPUT_FASTQ_DIR+"{study}/{sample}",
+        sample = "{sample}", 
+        log_file= logs_dirname+"/ena_download.{sample}.err"
     conda:
         "config/envs/ena_download.yml"
     resources:
@@ -50,8 +57,9 @@ rule ena_download:
     shell:
         """
         # Download files
-        fastq-dl --cpus {resources.ncores} -a {wildcards.sample} --outdir {params.outdir}
-        
+        echo "Starting fastq-dl at $(date)"
+        timeout 1800 fastq-dl --cpus {resources.ncores} -a {wildcards.sample} --outdir {params.outdir}
+        echo "Finished fastq-dl at $(date)"
         # Check if SRA file exists and process it if found
         if [ -f "{params.outdir}/{params.sample}.sra" ]; then
             cd {params.outdir}
@@ -95,12 +103,17 @@ rule ena_download:
 
 rule metagen_qc:
     input:
-        fwd = "{output}/{study}/{sample}/{sample}_1.fastq.gz"
+        fwd = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1.fastq.gz")
+        #fwd = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1.fastq.gz"
     output:
-        msg = "{output}/{study}/{sample}/qc_done.txt"
+        msg = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "qc_done.txt")
+        #msg = OUTPUT_FASTQ_DIR+"{study}/{sample}/qc_done.txt"
     params:
         bwa_ref = host_ref,
-        fwd = "{output}/{study}/{sample}/{sample}_1_clean.fastq.gz"
+        fwd = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1_clean.fastq.gz"),
+        #fwd = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1_clean.fastq.gz", 
+        log_file = os.path.join(logs_dirname, "metagen_qc.{sample}.err")
+        #log_file= logs_dirname+"/metagen_qc.{sample}.err"
     conda:
         "config/envs/metagen_qc.yml"
     resources:
@@ -117,7 +130,11 @@ rule paladin_prepare:
         fasta_path = config['fasta_path'],
         paladin_ref_dir = config['paladin_ref_dir']
     output:
-        msg = "paladin_prepare_done.txt"
+        msg = os.path.join(PALADIN_REF_DIR, "paladin_prepare_done.txt"),
+        index = os.path.join(PALADIN_REF_DIR, FASTA_NAME)
+    log:
+        log_file = os.path.join(logs_dirname, "paladin_prepare.err")
+        #log_file= logs_dirname+"/paladin_prepare.err"
     conda:
         "config/envs/paladin_env.yml"
     shell:
@@ -128,22 +145,31 @@ rule paladin_prepare:
 
 rule paladin_align:
     input:
-        paladin_ref = config["paladin_db"],
-        fastq_path = "{output}/{study}/{sample}/{sample}_1.fastq.gz",
-        qc_complete =  "{output}/{study}/{sample}/qc_done.txt",
-        prep_complete = "paladin_prepare_done.txt"
+        #prep_fasta_path = PALADIN_REF_DIR+FASTA_NAME,
+        prep_fasta_path = os.path.join(PALADIN_REF_DIR, FASTA_NAME),
+        #fastq_path = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1.fastq.gz",
+        fastq_path = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1.fastq.gz"),
+        #qc_complete =  OUTPUT_FASTQ_DIR+"{study}/{sample}/qc_done.txt",
+        qc_complete = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "qc_done.txt"),
+        prep_complete = os.path.join(PALADIN_REF_DIR, "paladin_prepare_done.txt")
+        #prep_complete = PALADIN_REF_DIR+"paladin_prepare_done.txt"
     params:
-        paladin_out = "{output}/{study}/{sample}/{sample}"
+        #paladin_out = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}", 
+        paladin_out = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}"),
+        log_file = os.path.join(logs_dirname, "paladin_align.{sample}.err")
+        #log_file= logs_dirname+"/paladin_align.{sample}.err"
     output:
-        sam_out = "{output}/{study}/{sample}/{sample}.sam",
-        txt = "{output}/{study}/{sample}/paladin_done.txt"
+        #bam_out = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}.bam",
+        bam_out = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}.bam"),
+        msg = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "paladin_done.txt"),
+        #msg = OUTPUT_FASTQ_DIR+"{study}/{sample}/paladin_done.txt"
     conda:
         "config/envs/paladin_env.yml"
     resources:
         ncores = cpus_paladin
     shell:
         """
-        bash ./scripts/align.sh {input.paladin_ref} {input.fastq_path} {params.paladin_out} {resources.ncores}
-        touch {output.txt}
-        rm {input.fastq_path}
+        bash ./scripts/align.sh {input.prep_fasta_path} {input.fastq_path} {params.paladin_out} {resources.ncores}
+        touch {output.msg}
+        #rm {input.fastq_path}
         """

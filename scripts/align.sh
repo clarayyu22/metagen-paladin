@@ -7,7 +7,7 @@ if [ "$#" -ne 4 ]; then
     exit 1
 fi
 
-FASTA_REF_DIR=$1
+FASTA_PATH=$1
 FASTQ_PATH=$2
 OUT_FILE=$3
 THREADS=$4
@@ -16,9 +16,9 @@ echo "starting alignment..."
 
 # Check if the output file already exists
 if [ ! -f "${OUT_FILE}.bam" ]; then
-    paladin align -a -t "$THREADS" "$FASTA_REF_DIR" "$FASTQ_PATH" > "${OUT_FILE}.sam"
+    paladin align -a -t "$THREADS" "$FASTA_PATH" "$FASTQ_PATH" > "${OUT_FILE}.sam"
     samtools view --threads "$THREADS" -S -b "${OUT_FILE}.sam" > "${OUT_FILE}.bam"
-    rm "${OUT_FILE}.sam"
+    #rm "${OUT_FILE}.sam"
     
     if [ $? -eq 0 ]; then
         echo "PALADIN alignment completed successfully"

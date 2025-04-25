@@ -1,7 +1,7 @@
 .snakemake/
 chm13v2.0.fa
+chm13v2.0.fa.*
 config/config.yml
 paladin/
-scripts/prepare.sh
 slurm-*.out
-paladin_prepare_done.txt
+logs/*
