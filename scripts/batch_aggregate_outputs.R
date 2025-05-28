@@ -24,6 +24,8 @@ batchtools_params <- tibble(
     ) %>% 
     tibble::rownames_to_column(var = "index") %>% 
     mutate(output_csv = glue("{duckdb_path}/chunk_{index}.csv")) %>%
+    # To filter existing chunks from previous runs
+    filter(!file.exists(output_csv)) %>% 
     dplyr::select(-index) %>% 
     glimpse()
 
