@@ -18,7 +18,7 @@ echo "starting alignment..."
 if [ ! -f "${OUT_FILE}.bam" ]; then
     paladin align -a -t "$THREADS" "$FASTA_PATH" "$FASTQ_PATH" > "${OUT_FILE}.sam"
     samtools view --threads "$THREADS" -S -b "${OUT_FILE}.sam" > "${OUT_FILE}.bam"
-    #rm "${OUT_FILE}.sam"
+    rm "${OUT_FILE}.sam"
     
     if [ $? -eq 0 ]; then
         echo "PALADIN alignment completed successfully"

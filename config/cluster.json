@@ -19,16 +19,28 @@
      "errfile": "{params.log_file}"
     },
     "paladin_prepare": {
-     "cores": 8,
+     "cores": 2,
      "mem": 32000,
      "time": "4:00:00", 
      "errfile": "{log.log_file}"
     },
     "paladin_align": {
-     "cores": 8,
-     "mem": 400000,
+     "cores": 4,
+     "mem": 100000,
+     "time": "12:00:00", 
+     "errfile": "{params.log_file}"
+    }, 
+    "bam_to_tsv": {
+     "cores": 2,
+     "mem": 100000,
+     "time": "12:00:00", 
+     "errfile": "{params.log_file}"
+    }, 
+    "combine_tsv": {
+     "cores": 2,
+     "mem": 50000,
      "time": "12:00:00", 
      "errfile": "{params.log_file}"
     }
-   }
+}
    
