@@ -1,7 +1,6 @@
 .snakemake/
+paladin/
 chm13v2.0.fa
 chm13v2.0.fa.*
-config/config.yml
-paladin/
 slurm-*.out
 logs/*

@@ -168,6 +168,7 @@ run_bam_to_tsv_pipeline <- function(bam_file, output_dir, mapq_threshold = 0) {
   processed_df <- process_bam_file(sorted_bam, output_dir, mapq_threshold)
   out_file <- file.path(output_dir, paste0(tools::file_path_sans_ext(basename(bam_file)), ".tsv"))
   utils::write.table(processed_df, file = out_file, sep = "\t", row.names = FALSE, quote = FALSE, na = "")
+  cat("wrote file to ", out_file)
 }
 
 run_bam_to_tsv_pipeline(bam_file, output_dir, mapq_threshold = 0)

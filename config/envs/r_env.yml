@@ -7,6 +7,8 @@ dependencies:
   - r-base
   - r-optparse
   - r-data.table
+  - r-fs
+  - r-stringr
   - r-dplyr
   - r-ggplot2
   - r-readr
