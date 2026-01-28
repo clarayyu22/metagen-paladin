@@ -14,5 +14,4 @@ echo "  Output: $OUTPUT_DIR"
 
 Rscript scripts/tsv_to_summary.R "$TSV_FILE" "$OUTPUT_DIR"
 
-#rm "$TSV_FILE"
 

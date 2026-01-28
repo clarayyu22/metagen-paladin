@@ -22,18 +22,6 @@ samp2study = {}
 
 os.system("chmod -R +x scripts")
 
-# with open(INPUT_FILE) as f:
-#     # Use f.readlines() if you want to skip the header line,
-#     # or just start the loop if your file has no header.
-#     for line in f:
-#         cols = line.rstrip().split("\t")
-#         current_sample = cols[0]
-#         if current_sample == "DRR127478":
-#             print(f"Skipping problematic sample: {current_sample}")
-#             continue 
-#         samp2study[current_sample] = cols[1]
-#         SAMPLES.append(current_sample)
-#         STUDIES.append(cols[1])
 
 with open(INPUT_FILE) as f:
     for line in f:
@@ -42,10 +30,6 @@ with open(INPUT_FILE) as f:
         SAMPLES.append(cols[0])
         STUDIES.append(cols[1])
 
-#for sample in samp2study:
-#    dirname = OUTPUT_FASTQ_DIR+samp2study[sample]+"/"+sample+"/logs"
-#    if not os.path.exists(dirname):
-#        os.makedirs(dirname)
 
 logs_dirname = "logs/" + config['logfile_name']
 if not os.path.exists(logs_dirname):
@@ -54,14 +38,6 @@ if not os.path.exists(logs_dirname):
 rule targets:
    input:
        expand([OUPUT_SUMMARY_DIR+"{study}/{sample}_tsv_to_summary_done.txt"], zip, study=STUDIES, sample=SAMPLES)
-
-# rule targets:
-#     input:
-#         summary = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "final_tsvs", "summary.tsv")
-
-#rule targets:
-#    input:
-#        expand([OUTPUT_FASTQ_DIR+"{study}/{sample}/paladin_done.txt"], zip, study=STUDIES, sample=SAMPLES)
 
 rule ena_download:
     output:
@@ -88,17 +64,13 @@ rule ena_download:
 rule metagen_qc:
     input:
         ena_done = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "ena_done.txt")
-        #fwd = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1.fastq.gz"
     output:
         msg = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "qc_done.txt")
-        #msg = OUTPUT_FASTQ_DIR+"{study}/{sample}/qc_done.txt"
     params:
         bwa_ref = host_ref,
         fwd = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1.fastq.gz"), 
         fwd_clean = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1_clean.fastq.gz"),
-        #fwd = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1_clean.fastq.gz", 
         log_file = os.path.join(logs_dirname, "metagen_qc.{sample}.err")
-        #log_file= logs_dirname+"/metagen_qc.{sample}.err"
     conda:
         "config/envs/metagen_qc.yml"
     resources:
@@ -119,7 +91,6 @@ rule paladin_prepare:
         index = os.path.join(PALADIN_REF_DIR, FASTA_NAME)
     log:
         log_file = os.path.join(logs_dirname, "paladin_prepare.err")
-        #log_file= logs_dirname+"/paladin_prepare.err"
     conda:
         "config/envs/paladin_env.yml"
     shell:
@@ -130,24 +101,15 @@ rule paladin_prepare:
 
 rule paladin_align:
     input:
-        #prep_fasta_path = PALADIN_REF_DIR+FASTA_NAME,
         prep_fasta_path = os.path.join(PALADIN_REF_DIR, FASTA_NAME),
-        #fastq_path = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}_1.fastq.gz",
-        #qc_complete =  OUTPUT_FASTQ_DIR+"{study}/{sample}/qc_done.txt",
         qc_complete = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "qc_done.txt"),
         prep_complete = os.path.join(PALADIN_REF_DIR, "paladin_prepare_done.txt")
-        #prep_complete = PALADIN_REF_DIR+"paladin_prepare_done.txt"
     params:
-        #paladin_out = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}", 
         fastq_path = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}_1.fastq.gz"),
         paladin_out = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}"),
         log_file = os.path.join(logs_dirname, "paladin_align.{sample}.err")
-        #log_file= logs_dirname+"/paladin_align.{sample}.err"
     output:
-        #bam_out = OUTPUT_FASTQ_DIR+"{study}/{sample}/{sample}.bam",
-        #bam_out = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}.bam"),
         msg = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "paladin_done.txt")
-        #msg = OUTPUT_FASTQ_DIR+"{study}/{sample}/paladin_done.txt"
     conda:
         "config/envs/paladin_env.yml"
     resources:
@@ -168,7 +130,6 @@ rule bam_to_tsv:
     input:
         paladin_complete = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "paladin_done.txt")
     output:
-        #tsv = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "{study}", "{sample}.tsv"), 
         msg = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "bam_to_tsv_done.txt")
     params:
         bam = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}.bam"), 
@@ -191,7 +152,6 @@ rule tsv_to_summary:
         log_out = os.path.join(OUPUT_SUMMARY_DIR, "{study}", "{sample}_log.tsv"), 
         msg = os.path.join(OUPUT_SUMMARY_DIR, "{study}", "{sample}_tsv_to_summary_done.txt")
     params:
-        #input_dir = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs"), 
         bam = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}.bam"), 
         tsv = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "{study}", "{sample}.tsv"), 
         output_dir = os.path.join(OUPUT_SUMMARY_DIR, "{study}"), 
@@ -211,21 +171,3 @@ rule tsv_to_summary:
             touch {output.msg}
         fi
         """
-
-
-# rule combine_tsv:
-#     input:
-#         expand(os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "{study}", "{sample}.tsv"),
-#                zip, study=STUDIES, sample=SAMPLES)
-#     output:
-#         summary = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "final_tsvs", "summary.tsv")
-#     params:
-#         input_dir = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs"), 
-#         output_dir = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "final_tsvs"), 
-#         log_file = os.path.join(logs_dirname, "combine_tsv.err")
-#     conda:
-#         "config/envs/r_env.yml"
-#     shell:
-#         """
-#         bash scripts/combine_tsv_wrapper.sh {params.input_dir} {params.output_dir}
-#         """

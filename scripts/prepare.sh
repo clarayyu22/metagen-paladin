@@ -17,8 +17,7 @@ if [ ! -f "$PALADIN_REF_DIR/$FASTA_NAME.bwt" ]; then
     fi
     cp $FASTA_PATH $PALADIN_REF_DIR
     paladin index -r3 "$PALADIN_REF_DIR/$FASTA_NAME"
-    #paladin index -r3 $PALADIN_REF_DIR$FASTA_NAME
-    # paladin prepare -r1 -f $PALADIN_REF_DIR/$FASTA_NAME
+
 fi
 
 echo "Paladin prepare for ${FASTA_PATH} completed."
