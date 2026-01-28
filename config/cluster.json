@@ -10,7 +10,7 @@
     "ena_download": {
      "cores": 4,
      "mem": 50000,
-     "time": "12:00:00", 
+     "time": "8:00:00", 
      "errfile": "{params.log_file}"
     },
     "metagen_qc": {
@@ -27,19 +27,19 @@
     "paladin_align": {
      "cores": 4,
      "mem": 100000,
-     "time": "12:00:00", 
+     "time": "8:00:00", 
      "errfile": "{params.log_file}"
     }, 
     "bam_to_tsv": {
      "cores": 2,
-     "mem": 100000,
-     "time": "12:00:00", 
+     "mem": 300000,
+     "time": "8:00:00", 
      "errfile": "{params.log_file}"
     }, 
     "tsv_to_summary": {
      "cores": 2,
-     "mem": 100000,
-     "time": "12:00:00", 
+     "mem": 200000,
+     "time": "8:00:00", 
      "errfile": "{params.log_file}"
     }, 
     "combine_tsv": {

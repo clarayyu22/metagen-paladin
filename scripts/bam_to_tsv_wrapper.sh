@@ -16,5 +16,3 @@ Rscript scripts/bam_to_tsv.R "$BAM_FILE" "$OUTPUT_DIR"
 
 rm "${file_name}_sorted.bam.bai"
 rm "${file_name}_sorted.bam"
-rm "${file_name}.bam"
-

@@ -24,26 +24,26 @@
 # input_file: /central/groups/MazmanianLab/joeB/Microbiota-Immunomodulation/Microbiota-Immunomodulation/data/input/global_metagenome_screen/enterobacteriaceae_meta_study_paper_samples.tsv
 # input_file: /central/groups/MazmanianLab/joeB/Microbiota-Immunomodulation/Microbiota-Immunomodulation/data/input/global_metagenome_screen/subset.tsv
 # input_file: /central/scratch/clarayu/enterobacteriaceae_meta_study_paper_samples_full.tsv
-input_file: /central/groups/MazmanianLab/clara/microbiome_sample_search/data/interim/aggregate_metadata/nature_enriched_run_study_list.tsv
+input_file: /resnick/groups/MazmanianLab/clarayu/microbiome_sample_search/data/interim/aggregate_metadata/nature_enriched_run_study_filtered_completed.tsv
 
 #Output directory to store cleaned FASTQs
-output_fastq_dir: /central/scratch/clarayu/full_30k_run/fastqs/
+output_fastq_dir: /resnick/scratch/clarayu/new_1k_run/fastqs/
 #output_fastq_dir: /resnick/groups/MazmanianLab/clarayu/full_run/fastqs/
 # output_fastq_dir: /central/scratch/jbok/metagen-paladin_testmeagain/output_fastq/
 
 #Output directory to store final summary TSVs
-output_summary_dir: /resnick/groups/MazmanianLab/clarayu/full_30k_run_summary/
+output_summary_dir: /resnick/groups/MazmanianLab/clarayu/microbiome_sample_search/new_1k_run_summary/
 
 #Path to FASTA file of host genome for decontamination
-host_ref: /central/groups/MazmanianLab/clara/microbiome_sample_search/metagen-paladin/chm13v2.0.fa
+host_ref: /resnick/groups/MazmanianLab/clarayu/microbiome_sample_search/metagen-paladin/chm13v2.0.fa
 
 # path to fasta file to use for alignment
-fasta_path: /central/groups/MazmanianLab/clara/microbiome_sample_search/data/input/hCom2/hCom2.fasta
+fasta_path: /resnick/groups/MazmanianLab/clarayu/microbiome_sample_search/data/input/hCom2/hCom2.fasta
 
 # path to where paladin reference fasta file will be stored
-paladin_ref_dir: /central/scratch/clarayu/full_30k_run/paladin_ref/
+paladin_ref_dir: /resnick/scratch/clarayu/new_1k_run/paladin_ref/
 
-logfile_name: full_30k_run
+logfile_name: new_1k_run
 
 paladin:
   cores: 8

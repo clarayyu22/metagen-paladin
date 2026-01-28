@@ -138,7 +138,7 @@ summarize_with_threshold <- function(file_path) {
     fwrite(log_data, log_out_path, sep = "\t", quote = FALSE)
 
     # Delete input after success
-    fs::file_delete(file_path)
+    #fs::file_delete(file_path)
 
     cat(paste("  > Finished:", base_name, ". Summary and log saved.\n"))
 

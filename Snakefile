@@ -75,7 +75,7 @@ rule ena_download:
         "config/envs/ena_download.yml"
     resources:
         ncores = cpus_ena, 
-        load = 9
+        load = 2000
     shell:
         """
         bash scripts/ena_download_wrapper.sh \
@@ -192,16 +192,24 @@ rule tsv_to_summary:
         msg = os.path.join(OUPUT_SUMMARY_DIR, "{study}", "{sample}_tsv_to_summary_done.txt")
     params:
         #input_dir = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs"), 
+        bam = os.path.join(OUTPUT_FASTQ_DIR, "{study}", "{sample}", "{sample}.bam"), 
         tsv = os.path.join(OUTPUT_FASTQ_DIR, "tsv_outputs", "{study}", "{sample}.tsv"), 
-        output_dir = os.path.join(OUPUT_SUMMARY_DIR, "summaries", "{study}"), 
+        output_dir = os.path.join(OUPUT_SUMMARY_DIR, "{study}"), 
         log_file = os.path.join(logs_dirname, "tsv_to_summary.err")
     conda:
         "config/envs/r_env.yml"
     shell:
-       """
+        """
         mkdir -p {params.output_dir}
+        
+        # Run the wrapper script
         bash ./scripts/tsv_to_summary_wrapper.sh {params.tsv} {params.output_dir}
-        touch {output.msg}
+        
+        if [[ -f "{output.tsv}" && -f "{output.log_out}" ]]; then
+            rm {params.tsv}
+            rm {params.bam}
+            touch {output.msg}
+        fi
         """
 
 

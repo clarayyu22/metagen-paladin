@@ -6,8 +6,8 @@ OUTDIR=$2
 NCORES=$3
 FORWARD_FASTQ=$4
 
-# Random sleep between 40-60 seconds
-SLEEP_TIME=$(( (RANDOM % 20) + 40 ))
+# Random sleep between 50-70 seconds
+SLEEP_TIME=$(( (RANDOM % 20) + 50 ))
 echo "Sleeping for $SLEEP_TIME seconds before starting download..."
 sleep $SLEEP_TIME
 
