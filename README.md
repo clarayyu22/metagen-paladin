@@ -23,7 +23,7 @@ git clone https://github.com/clarayyu22/metagen-paladin.git
 
 1. Edit the configuration file [`config_template/config.yml`](config_template/config.yml).
     - Rename `config/config_template.yml` to `config/config.yml`
-    - Directory paths should end in "`\`"
+    - Directory paths should end in "`/`"
 
 2. Download and index reference genome of choice
 
@@ -37,4 +37,4 @@ git clone https://github.com/clarayyu22/metagen-paladin.git
         snakemake --use-conda -k -j 25 --profile config/slurm
         ```
 
-3. Cleaned files will be stored in the specified FASTQ output directory followed by `[study]/[run]`. FASTQ files will be deleted after alignment to save memory. Alignment output files will be stored in the specified align output directory and named `[fasta]_[fastq sequence]_out_uniprot.tsv` and `[fasta]_[fastq sequence]_out.bam`. 
+3. Cleaned files will be stored in the specified FASTQ output directory followed by `[study]/[run]`. Intermediate files such as FASTQ, SAM/BAM, and intermediate TSV files will be deleted after alignment to save memory. 
